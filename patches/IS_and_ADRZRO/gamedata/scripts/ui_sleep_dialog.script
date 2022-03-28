@@ -104,18 +104,11 @@ function UISleep:TestAndShow(force)
  
 	if (force ~= true) then
 		local bleeding = db.actor.bleeding > 0
-		local radiation = db.actor.radiation > 0
 		
-		-- Prevent sleep if bleeding and/or iradiated.
-		if (bleeding or radiation) then
-			if (bleeding and radiation) then
-				actor_menu.set_msg(1, game.translate_string("st_sleep_bleeding_irradiated"),5)
-			elseif (bleeding) then
-				actor_menu.set_msg(1, game.translate_string("st_sleep_bleeding"),4)
-			elseif (radiation) then
-				actor_menu.set_msg(1, game.translate_string("st_sleep_irradiated"),4)
-			end
-			disable_info("sleep_active")				   
+		-- Prevent sleep if bleeding.
+		if (bleeding) then
+			actor_menu.set_msg(1, game.translate_string("st_sleep_bleeding"),4)
+			disable_info("sleep_active")
 			return
 		end
 		
@@ -130,7 +123,7 @@ function UISleep:TestAndShow(force)
 		-- If all is no, dont sleep
 		if (not actor_hide) then
 			actor_menu.set_msg(1, game.translate_string("st_cant_sleep_find_shelter_mlr"),4)
-			disable_info("sleep_active")				   
+			disable_info("sleep_active")
 			return
 		end
 	end
@@ -422,9 +415,8 @@ local sleep_zones = {
 function sleep_in_zone(actor, npc)
 	for k,v in pairs(sleep_zones) do
 		if utils_obj.npc_in_zone(db.actor, v) then
-			give_info("sleep_active")				
+			give_info("sleep_active")
 			sleep()
-			
 			break
 		end
 	end
